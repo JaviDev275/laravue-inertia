@@ -4,29 +4,23 @@ import { useForm } from "@inertiajs/vue3";
 import TextInput from "../components/TextInput.vue";
 
 const form = useForm({
-    name: null,
     email: null,
     password: null,
-    password_confirmation: null,
+    remember: null,
 });
 
 const submit = () => {
-    form.post("/register", {
-        onError: () => form.reset("password_confirmation", "password"),
+    form.post("/login", {
+        onError: () => form.reset("password", "remember"),
     });
 };
 </script>
 
 <template>
-    <Head title="| Register" />
-    <h1 class="title">Registre nuevas cuentas</h1>
+    <Head title="| Login" />
+    <h1 class="title">Iniciar Sesion</h1>
     <div class="w-2/4 mx-auto">
         <form @submit.prevent="submit">
-            <TextInput
-                name="Nombre"
-                v-model="form.name"
-                :message="form.errors.name"
-            />
             <TextInput
                 name="Correo electrónico"
                 v-model="form.email"
@@ -38,24 +32,30 @@ const submit = () => {
                 v-model="form.password"
                 :message="form.errors.password"
             />
-            <TextInput
-                name="Confirma Contraseña"
-                type="password"
-                v-model="form.password_confirmation"
-            />
-            <div>
-                <p class="text-slate-600 mb-2">
-                    ¿Ya tienes una cuenta?
-                    <a :href="route('login')" class="text-link"
-                        >Inicia sesion</a
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <label for="remember">Recordarme</label>
+                    <input
+                        type="checkbox"
+                        v-model="form.remember"
+                        id="remember"
+                    />
+                </div>
+
+                <p class="text-slate-600">
+                    ¿Necesitas una cuenta?
+                    <a :href="route('register')" class="text-link"
+                        >Registrate</a
                     >
                 </p>
+            </div>
+            <div>
                 <button
                     type="submit"
                     class="primary-btn"
                     :disabled="form.processing"
                 >
-                    Registrarse
+                    Iniciar Sesion
                 </button>
             </div>
         </form>
