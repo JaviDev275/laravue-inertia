@@ -10,44 +10,56 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post("/register");
+    form.post("/register", {
+        onError: () => form.reset("password_confirmation", "password"),
+    });
 };
 </script>
 
 <template>
-    <Head title="`| Register" />
-    <h1 class="title">Register a new accounts</h1>
+    <Head title="| Register" />
+    <h1 class="title">Registre nuevas cuentas</h1>
     <div class="w-2/4 mx-auto">
         <form @submit.prevent="submit">
             <div class="mb-4">
-                <label>Name</label>
+                <label>Nombre</label>
                 <input type="text" v-model="form.name" />
                 <small>{{ form.errors.name }}</small>
             </div>
             <div class="mb-4">
-                <label>Email</label>
+                <label>Correo electrónico</label>
                 <input name="email" type="text" v-model="form.email" />
                 <small>{{ form.errors.email }}</small>
             </div>
             <div class="mb-4">
-                <label>Password</label>
-                <input name="password" type="text" v-model="form.password" />
+                <label>Contraseña</label>
+                <input
+                    name="password"
+                    type="password"
+                    v-model="form.password"
+                />
                 <small>{{ form.errors.password }}</small>
             </div>
             <div class="mb-4">
-                <label>Confirm Password</label>
+                <label>Confirma Contraseña</label>
                 <input
                     name="password_confirmation"
-                    type="text"
+                    type="password"
                     v-model="form.password_confirmation"
                 />
             </div>
             <div>
                 <p class="text-slate-600 mb-2">
-                    Al ready a user?
-                    <a href="/" class="text-link">Login</a>
+                    ¿Ya tienes una cuenta?
+                    <a href="/" class="text-link">Inicia sesion</a>
                 </p>
-                <button type="submit" class="primary-btn">Register</button>
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    :disabled="form.processing"
+                >
+                    Registrarse
+                </button>
             </div>
         </form>
     </div>
