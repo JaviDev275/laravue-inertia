@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 class AuthController extends Controller
 {
     public function register(Request $request) {
-        sleep(1);
-        //Validate request
+
+
+
         $fields = $request->validate([
+            'avatar'=>['file','nullable','max:300'],
             'name' => ['required', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed','min:8'],
@@ -19,6 +23,12 @@ class AuthController extends Controller
             'email' => 'correo electrónico',
             'password' => 'contraseña',
         ]);
+
+        if($request->hasFile('avatar'))
+        {
+            $fields['avatar']= Storage::disk('public')->put('avatars', $request->avatar);
+            
+        }
         
         //Register user
         $user = User::create($fields);
@@ -27,7 +37,7 @@ class AuthController extends Controller
         auth()->login($user);
 
         //Redirect
-        return redirect()->route('home');
+        return redirect()->route('dashboard');
     }
     public function login(Request $request){
         $fields = $request -> validate([
