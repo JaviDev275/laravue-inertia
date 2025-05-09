@@ -10,7 +10,16 @@
                         >Home</Link
                     >
                 </div>
-                <div v-if="$page.props.auth.user" class="space-x-6">
+                <div v-if="$page.props.auth.user" class="space-x-6 flex">
+                    <img
+                        :src="
+                            $page.props.auth.user.avatar
+                                ? `/storage/${$page.props.auth.user.avatar}`
+                                : 'storage/avatars/default.jpg'
+                        "
+                        alt="avatar"
+                        class="avatar"
+                    />
                     <Link
                         :href="route('dashboard')"
                         class="nav-link"
